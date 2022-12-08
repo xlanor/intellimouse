@@ -105,3 +105,22 @@ For dpi min, `24 96 02 c8 00`
 Even though 01 remains consistent for dpi-max dpi-min immediately makes that not valid.
 
 I'll dump a few more captures and see if there's a pattern.
+
+
+---
+DPI read property
+
+This one is simple, its just a GET_REPORT 
+
+There's no body associated with the payload
+
+![dpi_read](dpi_read.png)
+
+
+We can see here that the read packet consists of 
+
+0x27 (Report ID: 39)
+0x01 (Input (1), report type)
+0x01 (wIndex)
+0x29 (report length)
+
