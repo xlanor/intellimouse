@@ -1,7 +1,9 @@
-package main
+package backend
 
 import (
 	"context"
+	"fmt"
+	"github.com/xlanor/intellimouse/api"
 )
 
 // App struct
@@ -17,17 +19,24 @@ func NewApp() *App {
 
 // startup is called at application startup
 // startup 在应用程序启动时调用
-func (a *App) startup(ctx context.Context) {
+func (a *App) Startup(ctx context.Context) {
 	// Perform your setup here
 	// 在这里执行初始化设置
 	a.ctx = ctx
+
 }
 
 // domReady is called after the front-end dom has been loaded
 // domReady 在前端Dom加载完毕后调用
-func (a *App) domReady(ctx context.Context) {
+func (a *App) DomReady(ctx context.Context) {
 	// Add your action here
 	// 在这里添加你的操作
+}
+
+func (a *App) LoadDevices(ctx context.Context) {
+
+	devices := api.GetDeviceInfo(api.HidStruct{})
+	fmt.Println(len(devices))
 }
 
 // beforeClose is called when the application is about to quit,
@@ -36,13 +45,13 @@ func (a *App) domReady(ctx context.Context) {
 // false will continue shutdown as normal.
 // beforeClose在单击窗口关闭按钮或调用runtime.Quit即将退出应用程序时被调用.
 // 返回 true 将导致应用程序继续，false 将继续正常关闭。
-func (a *App) beforeClose(ctx context.Context) (prevent bool) {
+func (a *App) BeforeClose(ctx context.Context) (prevent bool) {
 	return false
 }
 
 // shutdown is called at application termination
 // 在应用程序终止时被调用
-func (a *App) shutdown(ctx context.Context) {
+func (a *App) Shutdown(ctx context.Context) {
 	// Perform your teardown here
 	// 在此处做一些资源释放的操作
 }

@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/binary"
+	"encoding/hex"
 	"fmt"
 )
 
@@ -33,6 +34,10 @@ func (imp *IntelliMousePro) TriggerReadRequestPayload(read_property uint8) []byt
 	return request_arr
 }
 
+// Builds a byte array to send to the mouse (write).
+// Accepts a uint8, the write property that must be specified in the report.
+// Accepts a slice of []byte (or uint8 since byte is aliased to that.
+// returns a byte slice that has been zeroed out and the respective headers set.
 func (imp *IntelliMousePro) TriggerWriteDataRequestPayload(write_property uint8, data []byte) []byte {
 	request_arr := make([]byte, INTELLIMOUSE_PRO_SET_REPORT_LENGTH)
 	for i := 0; i < INTELLIMOUSE_PRO_SET_REPORT_LENGTH; i += 1 {
@@ -70,7 +75,18 @@ func (imp *IntelliMousePro) SetDpiPayload(dpi uint16) []byte {
 	return bs
 }
 
-func (imp *IntelliMousePro) GetDpi() []byte {
-
-	return []byte{}
+// Gets the data payload for setting a color hex LED after validating it.
+func (imp *IntelliMousePro) SetColorHexPayload(colorHexCode string) ([]byte, error) {
+	h := HexColor{}
+	h.Init(colorHexCode)
+	parsed, err := h.ValidateHex()
+	// this is naturally in big endian which is fine
+	if err != nil {
+		return []byte{}, err
+	}
+	data, err := hex.DecodeString(parsed)
+	if err != nil {
+		return []byte{}, err
+	}
+	return data, nil
 }

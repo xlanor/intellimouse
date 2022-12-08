@@ -1,4 +1,4 @@
-module intellimouse
+module github.com/xlanor/intellimouse
 
 go 1.18
 

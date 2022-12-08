@@ -40,6 +40,7 @@ func (hms HidMockStruct) Enumerate(vendorID uint16, productID uint16) []hid.Devi
 
 // Test using the hid driver to find a valid mouse interface
 func Test_Driver_GetDeviceInfo(t *testing.T) {
+	t.Parallel()
 	t.Run("Contains one valid device", func(t *testing.T) {
 		// mock an interface.
 		hms := HidMockStruct{}
@@ -78,6 +79,7 @@ func (ods OpenDeviceStructWithCloseError) SendFeatureReport(b []byte) (int, erro
 func (ods OpenDeviceStructWithCloseError) Write(b []byte) (int, error)             { return 0, nil }
 
 func Test_Driver_Open(t *testing.T) {
+	t.Parallel()
 	t.Run("Open device driver failed - not set", func(t *testing.T) {
 		d := Driver{}
 		err := d.Open()
@@ -101,6 +103,7 @@ func Test_Driver_Open(t *testing.T) {
 }
 
 func Test_Driver_Close(t *testing.T) {
+	t.Parallel()
 	t.Run("Open device driver failed - not set", func(t *testing.T) {
 		d := Driver{}
 		err := d.Close()
@@ -109,25 +112,31 @@ func Test_Driver_Close(t *testing.T) {
 	})
 }
 
-
 type SetDpiDeviceStructWithSetReportError struct{}
 
-func (ods SetDpiDeviceStructWithSetReportError) Close() error { return nil}
-func (ods SetDpiDeviceStructWithSetReportError) GetFeatureReport(b []byte) (int, error)  { return 0, nil }
-func (ods SetDpiDeviceStructWithSetReportError) Read(b []byte) (int, error)              { return 0, nil }
-func (ods SetDpiDeviceStructWithSetReportError) SendFeatureReport(b []byte) (int, error) { return -1, nil }
-func (ods SetDpiDeviceStructWithSetReportError) Write(b []byte) (int, error)             { return 0, nil }
+func (ods SetDpiDeviceStructWithSetReportError) Close() error { return nil }
+func (ods SetDpiDeviceStructWithSetReportError) GetFeatureReport(b []byte) (int, error) {
+	return 0, nil
+}
+func (ods SetDpiDeviceStructWithSetReportError) Read(b []byte) (int, error) { return 0, nil }
+func (ods SetDpiDeviceStructWithSetReportError) SendFeatureReport(b []byte) (int, error) {
+	return -1, nil
+}
+func (ods SetDpiDeviceStructWithSetReportError) Write(b []byte) (int, error) { return 0, nil }
 
 type SetDpiDeviceStructOk struct{}
 
-func (ods SetDpiDeviceStructOk) Close() error { return nil}
-func (ods SetDpiDeviceStructOk) GetFeatureReport(b []byte) (int, error)  { return 0, nil }
-func (ods SetDpiDeviceStructOk) Read(b []byte) (int, error)              { return 0, nil }
-func (ods SetDpiDeviceStructOk) SendFeatureReport(b []byte) (int, error) { return INTELLIMOUSE_PRO_SET_REPORT_LENGTH, nil }
-func (ods SetDpiDeviceStructOk) Write(b []byte) (int, error)             { return 0, nil }
+func (ods SetDpiDeviceStructOk) Close() error                           { return nil }
+func (ods SetDpiDeviceStructOk) GetFeatureReport(b []byte) (int, error) { return 0, nil }
+func (ods SetDpiDeviceStructOk) Read(b []byte) (int, error)             { return 0, nil }
+func (ods SetDpiDeviceStructOk) SendFeatureReport(b []byte) (int, error) {
+	return INTELLIMOUSE_PRO_SET_REPORT_LENGTH, nil
+}
+func (ods SetDpiDeviceStructOk) Write(b []byte) (int, error) { return 0, nil }
 
-func Test_Driver_SetDpi(t *testing.T){
-	t.Run("Test mouse and device nil error", func(t *testing.T){
+func Test_Driver_SetDpi(t *testing.T) {
+	t.Parallel()
+	t.Run("Test mouse and device nil error", func(t *testing.T) {
 		d := Driver{}
 		err := d.SetDpi(1000)
 		assert.Error(t, err)
@@ -136,52 +145,61 @@ func Test_Driver_SetDpi(t *testing.T){
 		err = d.SetDpi(1000)
 		assert.Equal(t, "Mouse Object or Device not instantiated", err.Error())
 	})
-	t.Run("Test Send feature report unexpected", func(t *testing.T){
-		d := Driver{} 
+	t.Run("Test Send feature report unexpected", func(t *testing.T) {
+		d := Driver{}
 		d.mouse = &IntelliMousePro{}
-		d.device = SetDpiDeviceStructWithSetReportError{}// interface override
+		d.device = SetDpiDeviceStructWithSetReportError{} // interface override
 		err := d.SetDpi(1000)
 		assert.Error(t, err)
 	})
-	t.Run("Test Send feature okay", func( t*testing.T){
-		d := Driver{} 
+	t.Run("Test Send feature okay", func(t *testing.T) {
+		d := Driver{}
 		d.mouse = &IntelliMousePro{}
-		d.device = SetDpiDeviceStructOk{}// interface override
+		d.device = SetDpiDeviceStructOk{} // interface override
 		err := d.SetDpi(1000)
 		assert.Nil(t, err)
 	})
 }
+
 type ReadDpiSendFeatureReportWrongLength struct{}
 
-func (ods ReadDpiSendFeatureReportWrongLength) Close() error { return nil}
-func (ods ReadDpiSendFeatureReportWrongLength) GetFeatureReport(b []byte) (int, error)  { return 0, nil }
-func (ods ReadDpiSendFeatureReportWrongLength) Read(b []byte) (int, error)              { return 0, nil }
-func (ods ReadDpiSendFeatureReportWrongLength) SendFeatureReport(b []byte) (int, error) { return -1, nil }
-func (ods ReadDpiSendFeatureReportWrongLength) Write(b []byte) (int, error)             { return 0, nil }
+func (ods ReadDpiSendFeatureReportWrongLength) Close() error                           { return nil }
+func (ods ReadDpiSendFeatureReportWrongLength) GetFeatureReport(b []byte) (int, error) { return 0, nil }
+func (ods ReadDpiSendFeatureReportWrongLength) Read(b []byte) (int, error)             { return 0, nil }
+func (ods ReadDpiSendFeatureReportWrongLength) SendFeatureReport(b []byte) (int, error) {
+	return -1, nil
+}
+func (ods ReadDpiSendFeatureReportWrongLength) Write(b []byte) (int, error) { return 0, nil }
 
 type ReadDpiGetFeatureReportError struct{}
 
-func (ods ReadDpiGetFeatureReportError) Close() error { return nil}
-func (ods ReadDpiGetFeatureReportError) GetFeatureReport(b []byte) (int, error)  { return 0, errors.New("Test") }
-func (ods ReadDpiGetFeatureReportError) Read(b []byte) (int, error)              { return 0, nil }
-func (ods ReadDpiGetFeatureReportError) SendFeatureReport(b []byte) (int, error) { return INTELLIMOUSE_PRO_SET_REPORT_LENGTH, nil }
-func (ods ReadDpiGetFeatureReportError) Write(b []byte) (int, error)             { return 0, nil }
+func (ods ReadDpiGetFeatureReportError) Close() error { return nil }
+func (ods ReadDpiGetFeatureReportError) GetFeatureReport(b []byte) (int, error) {
+	return 0, errors.New("Test")
+}
+func (ods ReadDpiGetFeatureReportError) Read(b []byte) (int, error) { return 0, nil }
+func (ods ReadDpiGetFeatureReportError) SendFeatureReport(b []byte) (int, error) {
+	return INTELLIMOUSE_PRO_SET_REPORT_LENGTH, nil
+}
+func (ods ReadDpiGetFeatureReportError) Write(b []byte) (int, error) { return 0, nil }
 
 type ReadDpiGetFeatureReportOk struct{}
 
-func (ods ReadDpiGetFeatureReportOk) Close() error { return nil}
-func (ods ReadDpiGetFeatureReportOk) GetFeatureReport(b []byte) (int, error)  { 
+func (ods ReadDpiGetFeatureReportOk) Close() error { return nil }
+func (ods ReadDpiGetFeatureReportOk) GetFeatureReport(b []byte) (int, error) {
 	b[5] = 0x3e
 	b[4] = 0x80
-	return 0, nil 
+	return 0, nil
 }
-func (ods ReadDpiGetFeatureReportOk) Read(b []byte) (int, error)              { return 0, nil }
-func (ods ReadDpiGetFeatureReportOk) SendFeatureReport(b []byte) (int, error) { return INTELLIMOUSE_PRO_SET_REPORT_LENGTH, nil }
-func (ods ReadDpiGetFeatureReportOk) Write(b []byte) (int, error)             { return 0, nil }
-
+func (ods ReadDpiGetFeatureReportOk) Read(b []byte) (int, error) { return 0, nil }
+func (ods ReadDpiGetFeatureReportOk) SendFeatureReport(b []byte) (int, error) {
+	return INTELLIMOUSE_PRO_SET_REPORT_LENGTH, nil
+}
+func (ods ReadDpiGetFeatureReportOk) Write(b []byte) (int, error) { return 0, nil }
 
 func Test_Driver_ReadDpi(t *testing.T) {
-	t.Run("Test mouse and device nil error", func(t *testing.T){
+	t.Parallel()
+	t.Run("Test mouse and device nil error", func(t *testing.T) {
 		d := Driver{}
 		err := d.SetDpi(1000)
 		assert.Error(t, err)
@@ -190,28 +208,28 @@ func Test_Driver_ReadDpi(t *testing.T) {
 		err = d.SetDpi(1000)
 		assert.Equal(t, "Mouse Object or Device not instantiated", err.Error())
 	})
-	t.Run("Test Feature report wrong len (trigger)", func(t *testing.T){
-		d := Driver{} 
+	t.Run("Test Feature report wrong len (trigger)", func(t *testing.T) {
+		d := Driver{}
 		d.mouse = &IntelliMousePro{}
-		d.device = ReadDpiSendFeatureReportWrongLength{}// interface override
+		d.device = ReadDpiSendFeatureReportWrongLength{} // interface override
 		_, err := d.ReadDpi()
 		assert.Error(t, err)
 		assert.Equal(t, "Error when reading report", err.Error())
 	})
 
-	t.Run("Test GetFeatureReport error", func(t *testing.T){
-		d := Driver{} 
+	t.Run("Test GetFeatureReport error", func(t *testing.T) {
+		d := Driver{}
 		d.mouse = &IntelliMousePro{}
-		d.device = ReadDpiGetFeatureReportError{}// interface override
+		d.device = ReadDpiGetFeatureReportError{} // interface override
 		_, err := d.ReadDpi()
 		assert.Error(t, err)
 		assert.Equal(t, "Error when reading report", err.Error())
 
 	})
-	t.Run("Test Read Dpi OK", func(t *testing.T){
-		d := Driver{} 
+	t.Run("Test Read Dpi OK", func(t *testing.T) {
+		d := Driver{}
 		d.mouse = &IntelliMousePro{}
-		d.device = ReadDpiGetFeatureReportOk{}// interface override
+		d.device = ReadDpiGetFeatureReportOk{} // interface override
 		rs, err := d.ReadDpi()
 		assert.Nil(t, err)
 		assert.Equal(t, uint16(16000), rs)
