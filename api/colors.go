@@ -2,6 +2,7 @@ package api
 
 import (
 	"errors"
+	"fmt"
 	"regexp"
 	"strings"
 )
@@ -42,4 +43,21 @@ func (h *HexColor) ValidateHex() (string, error) {
 		return ret.String(), nil
 	}
 	return s, nil
+}
+
+func (h *HexColor) BigEndianByteToHex(input []byte) string {
+	var rs strings.Builder
+	rs.WriteString("#")
+	for i := 0; i < len(input); i++ {
+		// 02 to respect the 2 space
+		rs.WriteString(fmt.Sprintf("%02X", input[i]))
+	}
+	if len(input) < 3 {
+		// pad to 3
+		for i := len(input); i < 3; i++ {
+			rs.WriteString("00")
+		}
+	}
+	return rs.String()
+
 }

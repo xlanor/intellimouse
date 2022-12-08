@@ -8,6 +8,10 @@
 *.so
 *.dylib
 
+# Debug binaries that are manually compiled
+main
+temp
+
 # Test binary, built with `go test -c`
 *.test
 

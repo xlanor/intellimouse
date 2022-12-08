@@ -6,6 +6,7 @@ import (
 )
 
 func Test_ValidateHex(t *testing.T) {
+	t.Parallel()
 	t.Run("Test invalid length", func(t *testing.T) {
 		// use something we know will be valid char
 		h := HexColor{}
@@ -53,5 +54,21 @@ func Test_ValidateHex(t *testing.T) {
 		rs, err := h.ValidateHex()
 		assert.Nil(t, err)
 		assert.Equal(t, "ABCDEF", rs)
+	})
+}
+
+func Test_BigEndianByteToHex(t *testing.T) {
+	t.Parallel()
+	t.Run("Test Big Endian Pad byte", func(t *testing.T) {
+		input := []byte{255}
+		ch := HexColor{}
+		rs := ch.BigEndianByteToHex(input)
+		assert.Equal(t, "#FF0000", rs)
+	})
+	t.Run("Test Big Endian Leading Zero", func(t *testing.T) {
+		input := []byte{0, 0, 0}
+		ch := HexColor{}
+		rs := ch.BigEndianByteToHex(input)
+		assert.Equal(t, "#000000", rs)
 	})
 }
