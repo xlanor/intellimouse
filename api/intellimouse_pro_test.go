@@ -9,21 +9,6 @@ const (
 	DPI = 128
 )
 
-// Helper function to quickly convert a byte array to uint16, base 10
-// This assumes that the input byte array is a 2byte array (uint16 is 2 bytes)
-// Endianess is passed as a second parameter (true for little endian, false for big endian)
-func GetUint16FromByte(in []byte, endian bool) uint16 {
-	var rs uint16
-	if endian {
-		// Little Endian
-		rs = uint16(in[1])<<8 | uint16(in[0])
-	} else {
-		// Big Endian
-		rs = uint16(in[0])<<8 | uint16(in[1])
-	}
-	return rs
-}
-
 func Test_SetDpi(t *testing.T) {
 	t.Parallel()
 	ims := IntelliMousePro{}
@@ -51,16 +36,33 @@ func Test_TriggerReadRequestPayload(t *testing.T) {
 	t.Parallel()
 	t.Run("Test trigger read request payload", func(t *testing.T) {
 		ims := IntelliMousePro{}
-		bs := ims.TriggerReadRequestPayload(INTELLIMOUSE_PRO_DPI_READ)
+		data := []byte{}
+		bs, err := ims.TriggerReadRequestPayload(INTELLIMOUSE_PRO_DPI_READ, data)
 		// Validate byte slice
+		assert.Nil(t, err)
 		assert.Equal(t, INTELLIMOUSE_PRO_SET_REPORT_LENGTH, len(bs))
 		// Make sure all the properties are right.
 		assert.Equal(t, uint8(INTELLIMOUSE_PRO_SET_REPORT), bs[0])
 		assert.Equal(t, uint8(INTELLIMOUSE_PRO_DPI_READ), bs[1])
-		assert.Equal(t, uint8(0x01), bs[2])
+		assert.Equal(t, uint8(len(data)), bs[2])
 		// make sure rest of array is zeroed
 		for i := 3; i < INTELLIMOUSE_PRO_SET_REPORT_LENGTH; i++ {
 			assert.Equal(t, uint8(0x00), bs[i])
+		}
+	})
+	t.Run("Test trigger read request payload with data, accurate length", func(t *testing.T) {
+		ims := IntelliMousePro{}
+		data := []byte{0x01, 0xFF, 0x2A}
+		bs, err := ims.TriggerReadRequestPayload(INTELLIMOUSE_PRO_DPI_READ, data)
+		// Validate byte slice
+		assert.Nil(t, err)
+		assert.Equal(t, INTELLIMOUSE_PRO_SET_REPORT_LENGTH, len(bs))
+		// Make sure all the properties are right.
+		assert.Equal(t, uint8(INTELLIMOUSE_PRO_SET_REPORT), bs[0])
+		assert.Equal(t, uint8(INTELLIMOUSE_PRO_DPI_READ), bs[1])
+		assert.Equal(t, uint8(len(data)), bs[2])
+		for i := 3; i < 3+len(data); i++ {
+			assert.Equal(t, uint8(data[i-3]), bs[i])
 		}
 	})
 }
@@ -72,8 +74,8 @@ func Test_TriggerWriteDataRequestPayload(t *testing.T) {
 
 		data := []byte{255, 255, 255, 255}
 		test_property := uint8(0x8F)
-		bs := ims.TriggerWriteDataRequestPayload(test_property, data)
-
+		bs, err := ims.TriggerWriteDataRequestPayload(test_property, data)
+		assert.Nil(t, err)
 		// Validate byte slice
 		assert.Equal(t, INTELLIMOUSE_PRO_SET_REPORT_LENGTH, len(bs))
 

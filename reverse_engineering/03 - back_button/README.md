@@ -64,7 +64,7 @@ Only one way to confirm that, right? more packet dumps!
 
 I dropped the mouse from the virtual machine, fired up the usb packet sniffer, and reconnected the mouse. Once the mouse was loaded in, I killed the packet sniffer and started looking at the packet dump.
 
-Here, we're looking specifically for packets that begin with 2489 (0x24 0x89) in the data segment, transmitted from the host to the mouse. (src = host, dst = 1.4.0)
+Here, we're looking specifically for packets that begin with 2489 (0x24 0x89) in the data segment, transmitted from the host to the mouse. (src = host, dst = 1.4.0). When the mouse is plugged in, the driver needs to know what the current settings are to display it on the UI.
 
 ![generic_startup_2489](generic_startup_2489.png)
 
@@ -124,7 +124,7 @@ We will think about how to make it better later, lets just hardcode it for now.
 For each of the following experiments below, we will manually set it in the windows driver, drop the mouse from the vm, and then issue a read request to see if the values look more sane.
 
 ---
-> Set to dpi toggle
+#### Set to dpi toggle
 
 Read Request Packet:
 ```
@@ -135,7 +135,7 @@ Response:
 0x27 0x89 0x00 0x05 0x04 0x09 0x00 0x02 0x01 ...
 ```
 
-> Set to (back button)
+#### Set to (back button)
 
 Read Request Packet:
 ```
@@ -146,7 +146,7 @@ Response:
 0x27 0x89 0x00 0x05 0x04 0x09 0x00 0x01 0x04...
 ```
 
-Set to vertical scrolling
+#### Set to vertical scrolling
 
 Read Request Packet:
 ```
@@ -173,3 +173,12 @@ Let us look at the packet of vertical scrolling that we captured just to confirm
 ```
 
 So this confirms what I think should be the right protocol, as we can see `0x02 0x03` there, which appears to be the right value.
+
+---
+One night later:
+
+I was wrong, the numbers make no sense. I ended up writing random stuff based on the packets I was seeing and was able to reverse engineer about half of the options on there
+
+I'm not too sure what the other values are, and I dont think I will be reverse engineering them, its too much effort.
+
+Packet dumps attached.

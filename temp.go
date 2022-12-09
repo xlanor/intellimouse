@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/xlanor/intellimouse/api"
 	"os"
+	"time"
 )
 
 // for me to quickly test out stuff.
@@ -23,10 +24,15 @@ func main() {
 		os.Exit(1)
 	}
 	defer driver.Close()
+	fmt.Println(driver.ReadDpi())
 	fmt.Println(driver.ReadLEDColor())
-	cyan := "#6202f2"
+	cyan := "#d40b58"
+	time.Sleep(1000 * time.Millisecond)
 	err = driver.SetLEDColor(cyan)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
+	fmt.Println(driver.GetCurrentBackButton())
+	driver.SetBackButton("INTELLIMOUSE_PRO_BACK_BUTTON_SET_BACK_BUTTON")
+	fmt.Println("Button set")
 }
