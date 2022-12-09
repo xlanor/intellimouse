@@ -1,4 +1,4 @@
-Attempting to teach myself reverse engineering a usb driver
+Attempting to teach myself reverse engineering a usb mouse to write a driver.
 
 lsusb -v output:
 
@@ -94,3 +94,11 @@ Device Descriptor:
         wMaxPacketSize     0x0040  1x 64 bytes
         bInterval              16
 ```
+
+I disconnected the mouse from the vm, set it up, and captured all of the packets it was firing off at the start.
+
+These are read packets, to trigger a response to tell the driver what the current settings of the mouse are so that it can process them
+
+I have no idea what each of these are, but this file will be very important to us because when we want to track down a read packet, the information should be here.
+
+The file is attached (generic) and can be filtered in wireshark with `(usb.src == "1.4.0" || usb.dst == "1.4.0" ) && frame.len == 109`
