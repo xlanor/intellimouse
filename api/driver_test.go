@@ -224,7 +224,6 @@ func Test_Driver_ReadDpi(t *testing.T) {
 		_, err := d.ReadDpi()
 		assert.Error(t, err)
 		assert.Equal(t, "Error when reading report", err.Error())
-
 	})
 	t.Run("Test Read Dpi OK", func(t *testing.T) {
 		d := Driver{}
@@ -233,6 +232,57 @@ func Test_Driver_ReadDpi(t *testing.T) {
 		rs, err := d.ReadDpi()
 		assert.Nil(t, err)
 		assert.Equal(t, uint16(16000), rs)
+	})
+}
 
+type ReadLEDGetFeatureReportOk struct{}
+
+func (ods ReadLEDGetFeatureReportOk) Close() error { return nil }
+func (ods ReadLEDGetFeatureReportOk) GetFeatureReport(b []byte) (int, error) {
+	b[6] = 0xAB
+	b[5] = 0x00
+	b[4] = 0xFF
+	return 0, nil
+}
+func (ods ReadLEDGetFeatureReportOk) Read(b []byte) (int, error) { return 0, nil }
+func (ods ReadLEDGetFeatureReportOk) SendFeatureReport(b []byte) (int, error) {
+	return INTELLIMOUSE_PRO_SET_REPORT_LENGTH, nil
+}
+func (ods ReadLEDGetFeatureReportOk) Write(b []byte) (int, error) { return 0, nil }
+
+func Test_TestReadLEDColor(t *testing.T) {
+	t.Parallel()
+	t.Run("Test mouse and device nil error", func(t *testing.T) {
+		d := Driver{}
+		err := d.SetDpi(1000)
+		assert.Error(t, err)
+		assert.Equal(t, "Mouse Object or Device not instantiated", err.Error())
+		d.mouse = &IntelliMousePro{}
+		err = d.SetDpi(1000)
+		assert.Equal(t, "Mouse Object or Device not instantiated", err.Error())
+	})
+	t.Run("", func(t *testing.T) {
+		d := Driver{}
+		d.mouse = &IntelliMousePro{}
+		d.device = ReadDpiSendFeatureReportWrongLength{} // interface override
+		_, err := d.ReadLEDColor()
+		assert.Error(t, err)
+		assert.Equal(t, "Error when reading report", err.Error())
+	})
+	t.Run("Test GetFeatureReport error", func(t *testing.T) {
+		d := Driver{}
+		d.mouse = &IntelliMousePro{}
+		d.device = ReadDpiGetFeatureReportError{} // interface override
+		_, err := d.ReadLEDColor()
+		assert.Error(t, err)
+		assert.Equal(t, "Error when reading report", err.Error())
+	})
+	t.Run("Test Read LED OK", func(t *testing.T) {
+		d := Driver{}
+		d.mouse = &IntelliMousePro{}
+		d.device = ReadLEDGetFeatureReportOk{} // interface override
+		rs, err := d.ReadLEDColor()
+		assert.Nil(t, err)
+		assert.Equal(t, "#FF00AB", rs)
 	})
 }
