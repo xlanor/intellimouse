@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/dolmen-go/hid v0.0.0-20220220205842-27ac09ac07a3
+	github.com/sirupsen/logrus v1.9.0
 	github.com/stretchr/testify v1.7.1
 	github.com/wailsapp/wails/v2 v2.2.0
 )
