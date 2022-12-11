@@ -13,6 +13,8 @@ export function LoadDevices(arg1:context.Context):Promise<void>;
 
 export function LoadDevicesPolling():Promise<Error>;
 
+export function SelectDevice(arg1:number):Promise<Error>;
+
 export function Shutdown(arg1:context.Context):Promise<void>;
 
 export function UpdateAvaliableDevices(arg1:Array<backend.DeviceInformationJson>):Promise<void>;

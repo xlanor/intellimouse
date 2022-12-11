@@ -2,6 +2,7 @@ package backend
 
 import (
 	"fmt"
+	"errors"
 	"github.com/dolmen-go/hid"
 	"github.com/mitchellh/hashstructure/v2"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
@@ -65,7 +66,6 @@ func (a *App) UpdateAvaliableDevices(dij []DeviceInformationJson) {
 			res = append(res, v)
 		}
 	}
-	fmt.Println("DELETE RES %v", res)
 	for _, toDelete := range res {
 		delete(a.AvaliableDevices, toDelete)
 	}
@@ -88,13 +88,40 @@ func (a *App) LoadAvaliableDevices() []DeviceInformationJson {
 	return ret
 }
 
+func (a *App) SelectDevice(checksum uint64) error {
+	fmt.Println("Checksum here")
+	fmt.Println(checksum)
+	if deviceInfo, ok := a.AvaliableDevices[checksum]; ok {
+		if deviceInfo.DeviceInfo != nil {
+			fmt.Println("Opening driver")
+			a.Driver = &api.Driver{}
+			a.Driver.Init(*deviceInfo.DeviceInfo)
+			err := a.Driver.Open()
+			if err != nil {
+				return err
+			}else {
+				fmt.Println(`Driver opened`)
+			}
+		}else{
+			fmt.Println("Device Info has no avaliable device")
+			fmt.Printf("%v\n", deviceInfo)
+			return errors.New("Unable to Open device")
+		}
+		
+	}else {
+		fmt.Println("Device Array has no avaliable device")
+		fmt.Printf("%v\n", a.AvaliableDevices)
+		return errors.New("Unable to find device")
+	}
+	return nil
+}
+
 func (a *App) LoadDevicesPolling() error {
+	// Poll for new usb devices
 	go func() {
 		for {
-			fmt.Println("Polling HID interface")
 			runtime.EventsEmit(a.ctx, "devices", a.LoadAvaliableDevices())
 			time.Sleep(1 * time.Second)
-			fmt.Printf("%v\n", a.AvaliableDevices)
 		}
 	}()
 	return nil

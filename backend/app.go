@@ -54,4 +54,7 @@ func (a *App) BeforeClose(ctx context.Context) (prevent bool) {
 // shutdown is called at application termination
 func (a *App) Shutdown(ctx context.Context) {
 	// Perform your teardown here
+	if a.Driver != nil {
+		a.Driver.Close()
+	}
 }

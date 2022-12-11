@@ -1,27 +1,54 @@
 <script lang="ts" setup>
-import Device from './components/Device.vue'
+  import { reactive, ref, computed } from 'vue'
+  import Device from './components/Device.vue'
+  import DeviceSettings from './components/DeviceSettings.vue'
+
+  // state
+
+  const state: any = reactive({
+    selectedChecksum: ref(""),
+    displaySelectDevices: ref(true),
+    showMouseInformation: computed(()=> {
+      return state.displaySelectDevices === false
+    })
+  })
+
+  const deviceSelected = (selectedChecksum: string) => {
+    state.selectedChecksum = selectedChecksum
+    state.displaySelectDevices = ref(false)
+    console.log(`deviceSelected called, state ${JSON.stringify(state)}`)
+  }
+
 </script>
 
 <template>
-  <Device/>
+  
+  <TransitionGroup name="fade" mode="out-in">
+    <div v-if="state.displaySelectDevices">
+      <Device @deviceSelected="deviceSelected"/>
+    </div>
+  </TransitionGroup>
+  <TransitionGroup name="fade" mode="out-in">
+    <div v-if="state.showMouseInformation">
+      <DeviceSettings :checksum="state.selectedChecksum"/>
+    </div>
+  </TransitionGroup>
 </template>
 
 <style>
-#logo {
-  display: block;
-  width: 50%;
-  height: 50%;
-  margin: auto;
-  padding: 10% 0 0;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  background-origin: content-box;
-}
 
 #app {
   font-family: "Roboto Mono";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 1s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
