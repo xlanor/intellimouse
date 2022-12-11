@@ -28,3 +28,6 @@ main
 go.work
 
 node_modules/
+
+frontend/dist/
+frontend/node_modules/
