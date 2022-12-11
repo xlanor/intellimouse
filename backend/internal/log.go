@@ -1,6 +1,6 @@
 package internal
 
-// Backend structure and logging module with reference to 
+// Backend structure and logging module with reference to
 // Cantor by evercyan, released under the MIT license
 // https://github.com/evercyan/cantor
 

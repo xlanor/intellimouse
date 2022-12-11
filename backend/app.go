@@ -3,16 +3,18 @@ package backend
 import (
 	"context"
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"github.com/xlanor/intellimouse/api"
 	"github.com/xlanor/intellimouse/backend/internal"
-	"github.com/sirupsen/logrus"
 )
 
 // App struct
 type App struct {
-	ctx context.Context
-	Log *logrus.Logger
-	Driver *api.Driver
+	ctx               context.Context
+	Log               *logrus.Logger
+	Driver            *api.Driver
+	DeviceInformation DeviceInformationJson
+	AvaliableDevices  map[uint64]DeviceInformationJson
 }
 
 // NewApp creates a new App application struct
@@ -25,6 +27,7 @@ func (a *App) Startup(ctx context.Context) {
 	// Perform your setup here
 	a.ctx = ctx
 	a.Log = internal.NewLogger()
+	a.AvaliableDevices = make(map[uint64]DeviceInformationJson)
 	a.LoadDevicesPolling()
 	return
 }

@@ -25,3 +25,7 @@ export function LoadDevicesPolling() {
 export function Shutdown(arg1) {
   return window['go']['backend']['App']['Shutdown'](arg1);
 }
+
+export function UpdateAvaliableDevices(arg1) {
+  return window['go']['backend']['App']['UpdateAvaliableDevices'](arg1);
+}
