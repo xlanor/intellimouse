@@ -14,7 +14,7 @@ type App struct {
 	Log               *logrus.Logger
 	Driver            *api.Driver
 	DeviceInformation DeviceInformationJson
-	AvaliableDevices  map[uint64]DeviceInformationJson
+	AvaliableDevices  map[string]DeviceInformationJson
 }
 
 // NewApp creates a new App application struct
@@ -27,7 +27,7 @@ func (a *App) Startup(ctx context.Context) {
 	// Perform your setup here
 	a.ctx = ctx
 	a.Log = internal.NewLogger()
-	a.AvaliableDevices = make(map[uint64]DeviceInformationJson)
+	a.AvaliableDevices = make(map[string]DeviceInformationJson)
 	a.LoadDevicesPolling()
 	return
 }

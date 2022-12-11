@@ -1,17 +1,18 @@
 package backend
 
 import (
-	"fmt"
 	"errors"
+	"fmt"
 	"github.com/dolmen-go/hid"
 	"github.com/mitchellh/hashstructure/v2"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"github.com/xlanor/intellimouse/api"
 	"golang.org/x/exp/maps"
+	"strconv"
 	"time"
 )
 
-func inslice(n uint64, h []uint64) bool {
+func inslice(n string, h []string) bool {
 	for _, v := range h {
 		if v == n {
 			return true
@@ -29,7 +30,7 @@ type DeviceInformationJson struct {
 	Manufacturer string          `json:"manufacturer"`
 	Product      string          `json:"product"`
 	Interface    int             `json:"interface"`
-	Hash         uint64          `json:"checksum"`
+	Hash         string          `json:"checksum"`
 	DeviceInfo   *hid.DeviceInfo // Keep this in memory first to open a device easily
 }
 
@@ -45,14 +46,17 @@ func (d *DeviceInformationJson) ParseFromHidLib(di *hid.DeviceInfo) {
 	hash, err := hashstructure.Hash(d, hashstructure.FormatV2, nil)
 	if err != nil {
 		panic(fmt.Sprintf("ParseFromHdbLib error: %s", err.Error()))
+	} else {
+
 	}
-	d.Hash = hash
+	// dont use uint, js will overflow it...
+	d.Hash = strconv.FormatUint(hash, 10)
 	d.DeviceInfo = di
 }
 
 func (a *App) UpdateAvaliableDevices(dij []DeviceInformationJson) {
 	// build an array of hashes
-	hashes := make([]uint64, 0)
+	hashes := make([]string, 0)
 	for _, v := range dij {
 		if _, ok := a.AvaliableDevices[v.Hash]; !ok {
 			a.AvaliableDevices[v.Hash] = v
@@ -60,7 +64,7 @@ func (a *App) UpdateAvaliableDevices(dij []DeviceInformationJson) {
 		hashes = append(hashes, v.Hash)
 	}
 	map_keys := maps.Keys(a.AvaliableDevices)
-	res := make([]uint64, 0)
+	res := make([]string, 0)
 	for _, v := range map_keys {
 		if !inslice(v, hashes) {
 			res = append(res, v)
@@ -88,7 +92,7 @@ func (a *App) LoadAvaliableDevices() []DeviceInformationJson {
 	return ret
 }
 
-func (a *App) SelectDevice(checksum uint64) error {
+func (a *App) SelectDevice(checksum string) error {
 	fmt.Println("Checksum here")
 	fmt.Println(checksum)
 	if deviceInfo, ok := a.AvaliableDevices[checksum]; ok {
@@ -99,16 +103,16 @@ func (a *App) SelectDevice(checksum uint64) error {
 			err := a.Driver.Open()
 			if err != nil {
 				return err
-			}else {
+			} else {
 				fmt.Println(`Driver opened`)
 			}
-		}else{
+		} else {
 			fmt.Println("Device Info has no avaliable device")
 			fmt.Printf("%v\n", deviceInfo)
 			return errors.New("Unable to Open device")
 		}
-		
-	}else {
+
+	} else {
 		fmt.Println("Device Array has no avaliable device")
 		fmt.Printf("%v\n", a.AvaliableDevices)
 		return errors.New("Unable to find device")

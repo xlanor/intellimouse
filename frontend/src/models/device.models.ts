@@ -7,5 +7,5 @@ export interface Device {
   product: string;
   interface: number;
   timestamp: number;
-  checksum: number;
+  checksum: string;
 }
