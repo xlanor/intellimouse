@@ -3,6 +3,7 @@ package backend
 import (
 	"fmt"
 	"github.com/xlanor/intellimouse/api"
+	"github.com/mitchellh/hashstructure/v2"
 	"github.com/dolmen-go/hid"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"time"
@@ -17,6 +18,7 @@ type DeviceInformationJson struct {
 	Manufacturer string `json:"manufacturer"`
 	Product string `json:"product"`
 	Interface int `json:"interface"`
+	Hash uint64 `json:"checksum"`
 	DeviceInfo *hid.DeviceInfo	// Keep this in memory first to open a device easily
 }
 
@@ -28,6 +30,12 @@ func (d *DeviceInformationJson) ParseFromHidLib(di *hid.DeviceInfo) {
 	d.Manufacturer = di.Manufacturer
 	d.Product = di.Product
 	d.Interface = di.Interface
+	d.DeviceInfo = nil
+	hash, err := hashstructure.Hash(d,hashstructure.FormatV2, nil)
+	if err != nil {
+		panic(fmt.Sprintf("ParseFromHdbLib error: %s", err.Error()))
+	}
+	d.Hash = hash
 	d.DeviceInfo = di
 }
 
@@ -51,7 +59,7 @@ func (a *App) LoadDevicesPolling() error {
 		for {
 			fmt.Println("Polling HID interface")
 			runtime.EventsEmit(a.ctx, "devices", a.LoadAvaliableDevices())
-			time.Sleep(15 * time.Second)
+			time.Sleep(1 * time.Second)
 		}
 	}()
 	return nil

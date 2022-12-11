@@ -3,7 +3,6 @@ import Device from './components/Device.vue'
 </script>
 
 <template>
-  <img id="logo" alt="Wails logo" src="./assets/images/logo-universal.png"/>
   <Device/>
 </template>
 
@@ -18,5 +17,11 @@ import Device from './components/Device.vue'
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-origin: content-box;
+}
+
+#app {
+  font-family: "Roboto Mono";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 </style>

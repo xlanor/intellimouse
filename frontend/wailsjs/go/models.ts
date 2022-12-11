@@ -8,6 +8,7 @@ export namespace backend {
 	    manufacturer: string;
 	    product: string;
 	    interface: number;
+	    checksum: number;
 	
 	    static createFrom(source: any = {}) {
 	        return new DeviceInformationJson(source);
@@ -22,6 +23,7 @@ export namespace backend {
 	        this.manufacturer = source["manufacturer"];
 	        this.product = source["product"];
 	        this.interface = source["interface"];
+	        this.checksum = source["checksum"];
 	    }
 	}
 
