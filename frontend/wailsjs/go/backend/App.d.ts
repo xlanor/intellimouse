@@ -7,6 +7,8 @@ export function BeforeClose(arg1:context.Context):Promise<boolean>;
 
 export function DomReady(arg1:context.Context):Promise<void>;
 
+export function GetDeviceInformation():Promise<void>;
+
 export function LoadAvaliableDevices():Promise<Array<backend.DeviceInformationJson>>;
 
 export function LoadDevices(arg1:context.Context):Promise<void>;

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-
   import { ref, onMounted, reactive, computed, defineEmits } from 'vue'
   import { storeToRefs } from 'pinia'
   import {
@@ -35,6 +34,13 @@
     }
   };
 
+  const getDeviceName = (vendor_id: number, product_id: number):string => {
+    if (vendor_id === 1118 && product_id === 2090) {
+      return "Microsoft Intellimouse Explorer Pro (2018)"
+    }
+    return "unknown"
+  }
+
   onMounted(()=> {
     runtime.EventsOn("devices", onImportEvent);
   })
@@ -42,21 +48,74 @@
 </script>
 
 <template>
-    <v-card
-      elevation="2"
-      class="device-select"
-      v-for="(rates, index) in devices"
-      :key="index + 'box'"
-      @click="$emit('deviceSelected', rates.checksum)"
-      v-if="state.validShowDevices"
-    >
-      {{rates.vendor_id}}:{{rates.product_id}}
-    </v-card>
+  <div class="container-box">
+    <div>
+      <div class="title-text">
+        SELECT DEVICE
+      </div>
+      <div class="line"></div>
+      <div 
+        class="box1" 
+        v-for="(rates, index) in devices"
+        :key="index + 'box'"
+        @click="$emit('deviceSelected', rates.checksum)"
+        v-if="state.validShowDevices"
+      >
+        <div class="select-device-text">
+          <!-- In case we want to support intellimouse in the future -->
+          {{ getDeviceName (rates.vendor_id, rates.product_id)}}
+        </div>
+      </div>
+    </div>
+    
+  </div>
 </template>
 
 <style>
-.device-select {
-  height: 4em;
-  width: 30em;
+.title-text {
+  font-size: 3.5em;
+    text-shadow: 2px 4px 4px rgba(46,91,173,0.6);
+}
+.container-box {
+  height: 100%;
+  width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.box1{
+  margin-top: 10px;
+  height: 5em;
+  width: 35em;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(20px) saturate(160%) contrast(45%) brightness(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%) contrast(45%) brightness(140%);
+  border-radius: 15px;
+  transition: 0.5s;
+  border: 1px solid #b5b5b5;
+  border-radius: 10px;
+}
+.box1:hover{
+  box-shadow: 0 0 3px black;
+  margin-top: 0px;
+  width: 40em;
+  height: 7em;
+}
+.select-device-text {
+  cursor: grab;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  font-size: 1.5em;
+  align-items: center; /** Y-axis align **/
+  justify-content: center; /** X-axis align **/
+  text-shadow: 2px 4px 4px rgba(18, 23, 31, 0.6);
+}
+.line {
+  border: 0;
+  background-color: rgba(255, 255, 255, 0.2);
+  height: 2px;
+  margin-bottom: 10px;
 }
 </style>

@@ -10,6 +10,10 @@ export function DomReady(arg1) {
   return window['go']['backend']['App']['DomReady'](arg1);
 }
 
+export function GetDeviceInformation() {
+  return window['go']['backend']['App']['GetDeviceInformation']();
+}
+
 export function LoadAvaliableDevices() {
   return window['go']['backend']['App']['LoadAvaliableDevices']();
 }

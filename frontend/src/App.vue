@@ -22,23 +22,31 @@
 </script>
 
 <template>
-  
-  <TransitionGroup name="fade" mode="out-in">
-    <div v-if="state.displaySelectDevices">
+  <div class="app-root">
+  <transition name="fade" mode="out-in">
+    <div class="display-card" key="1" v-if="state.displaySelectDevices">
       <Device @deviceSelected="deviceSelected"/>
     </div>
-  </TransitionGroup>
-  <TransitionGroup name="fade" mode="out-in">
-    <div v-if="state.showMouseInformation">
+    <div key="2" v-else>
       <DeviceSettings :checksum="state.selectedChecksum"/>
     </div>
-  </TransitionGroup>
+  </transition>
+    
+  </div>
 </template>
 
 <style>
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+.app-root{
+  height: 100%;
+}
+
+.display-card{
+  height: 100%;
+}
 
 #app {
-  font-family: "Roboto Mono";
+  font-family: "Raleway";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

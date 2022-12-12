@@ -130,3 +130,11 @@ func (a *App) LoadDevicesPolling() error {
 	}()
 	return nil
 }
+
+func (a *App) GetDeviceInformation() {
+	if a.Driver != nil {
+		a.Driver.ReadDpi()
+		a.Driver.ReadLEDColor()
+		a.Driver.GetCurrentBackButton()	
+	}
+}
