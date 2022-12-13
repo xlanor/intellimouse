@@ -51,7 +51,6 @@ export const useDeviceStore = defineStore({
           // push it if it doesnt exist.
           this.devices.push(payload);
         }
-        console.log(toRaw(this.devices))
       },
       flushOldItems() {
         // call this at the end of updating the store
@@ -59,7 +58,6 @@ export const useDeviceStore = defineStore({
         // TODO: THINK OF A MORE EFFICENT WAY TO DO THIS
         this.devices = this.devices.filter(x => x.timestamp == this.timestamp)
         
-        console.log(toRaw(this.devices))
       },
       deleteItem(vendor_id: number, product_id: number) {
         const index = this.findIndexById(vendor_id, product_id);

@@ -16,34 +16,29 @@
   const deviceSelected = (selectedChecksum: string) => {
     state.selectedChecksum = selectedChecksum
     state.displaySelectDevices = ref(false)
-    console.log(`deviceSelected called, state ${JSON.stringify(state)}`)
   }
 
 </script>
 
 <template>
-  <div class="app-root">
-  <transition name="fade" mode="out-in">
-    <div class="display-card" key="1" v-if="state.displaySelectDevices">
-      <Device @deviceSelected="deviceSelected"/>
-    </div>
-    <div key="2" v-else>
-      <DeviceSettings :checksum="state.selectedChecksum"/>
-    </div>
-  </transition>
+  <v-app color="#2E2252">
+  <v-row fill-height>
+    <transition name="fade" mode="out-in">
+        <!--<Device key="1" v-if="state.displaySelectDevices" @deviceSelected="deviceSelected"/>-->
+        <DeviceSettings  key="2" :checksum="state.selectedChecksum"/>
+    </transition>
+      
+  </v-row>
     
-  </div>
+
+    
+  </v-app>
 </template>
 
 <style>
 @import url('https://fonts.googleapis.com/css?family=Raleway');
-.app-root{
-  height: 100%;
-}
 
-.display-card{
-  height: 100%;
-}
+
 
 #app {
   font-family: "Raleway";

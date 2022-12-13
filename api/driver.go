@@ -168,7 +168,7 @@ func (di *Driver) ReadDpi() (uint16, error) {
 		return 0x00, errors.New("Error when reading report")
 	}
 
-	time.Sleep(MOUSE_SLEEP_DRIVER_MILLISECONDS * time.Millisecond)
+	//time.Sleep(MOUSE_SLEEP_DRIVER_MILLISECONDS * time.Millisecond)
 	// Listen to the report from the mouse
 	read_report := make([]byte, INTELLIMOUSE_PRO_GET_REPORT_LENGTH)
 	read_report[0] = INTELLIMOUSE_PRO_GET_REPORT
@@ -177,7 +177,7 @@ func (di *Driver) ReadDpi() (uint16, error) {
 		return 0, errors.New("Error when reading report")
 	}
 
-	time.Sleep(MOUSE_SLEEP_DRIVER_MILLISECONDS * time.Millisecond)
+	//time.Sleep(MOUSE_SLEEP_DRIVER_MILLISECONDS * time.Millisecond)
 
 	if len(read_report) < 6 {
 		return 0x00, errors.New("Result from mouse was too short, unknown error!")
@@ -204,7 +204,7 @@ func (di *Driver) ReadLEDColor() (string, error) {
 		return "", errors.New("Error when reading report")
 	}
 
-	time.Sleep(MOUSE_SLEEP_DRIVER_MILLISECONDS * time.Millisecond)
+	//time.Sleep(MOUSE_SLEEP_DRIVER_MILLISECONDS * time.Millisecond)
 	// Listen to the report from the mouse
 	read_report := make([]byte, INTELLIMOUSE_PRO_GET_REPORT_LENGTH)
 	read_report[0] = INTELLIMOUSE_PRO_GET_REPORT
@@ -213,7 +213,7 @@ func (di *Driver) ReadLEDColor() (string, error) {
 		return "", errors.New("Error when reading report")
 	}
 
-	time.Sleep(MOUSE_SLEEP_DRIVER_MILLISECONDS * time.Millisecond)
+	//time.Sleep(MOUSE_SLEEP_DRIVER_MILLISECONDS * time.Millisecond)
 	if len(read_report) < 7 {
 		return "", errors.New("Read report returned less than 7 bytes")
 	}
@@ -271,13 +271,13 @@ func (di *Driver) GetCurrentBackButton() (string, error) {
 		return "", err
 	}
 
-	time.Sleep(MOUSE_SLEEP_DRIVER_MILLISECONDS * time.Millisecond)
+	//time.Sleep(MOUSE_SLEEP_DRIVER_MILLISECONDS * time.Millisecond)
 
 	read_report := make([]byte, INTELLIMOUSE_PRO_GET_REPORT_LENGTH)
 	read_report[0] = INTELLIMOUSE_PRO_GET_REPORT
 	_, err = di.device.GetFeatureReport(read_report)
 
-	time.Sleep(MOUSE_SLEEP_DRIVER_MILLISECONDS * time.Millisecond)
+	//time.Sleep(MOUSE_SLEEP_DRIVER_MILLISECONDS * time.Millisecond)
 
 	if len(read_report) < 8 {
 		return "", errors.New("Result from mouse was too short, unknown error!")

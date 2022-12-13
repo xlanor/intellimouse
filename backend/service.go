@@ -21,18 +21,6 @@ func inslice(n string, h []string) bool {
 	return false
 }
 
-// expose to vue
-type DeviceInformationJson struct {
-	Path         string          `json:"path"`
-	VendorID     uint16          `json:"vendor_id"`
-	ProductID    uint16          `json:"product_id"`
-	Serial       string          `json:"serial"`
-	Manufacturer string          `json:"manufacturer"`
-	Product      string          `json:"product"`
-	Interface    int             `json:"interface"`
-	Hash         string          `json:"checksum"`
-	DeviceInfo   *hid.DeviceInfo // Keep this in memory first to open a device easily
-}
 
 func (d *DeviceInformationJson) ParseFromHidLib(di *hid.DeviceInfo) {
 	d.Path = di.Path
@@ -105,6 +93,7 @@ func (a *App) SelectDevice(checksum string) error {
 				return err
 			} else {
 				fmt.Println(`Driver opened`)
+				a.GetDeviceInformation()
 			}
 		} else {
 			fmt.Println("Device Info has no avaliable device")
@@ -133,8 +122,12 @@ func (a *App) LoadDevicesPolling() error {
 
 func (a *App) GetDeviceInformation() {
 	if a.Driver != nil {
-		a.Driver.ReadDpi()
-		a.Driver.ReadLEDColor()
-		a.Driver.GetCurrentBackButton()	
+		fmt.Println("Here")
+		m := MouseInformationStruct{}
+		m.Init(a.Driver)
+		fmt.Printf("%v\n", m)
+		runtime.EventsEmit(a.ctx, "mouseinformation", m)
+	}else {
+		fmt.Println("Driver nil")
 	}
 }
