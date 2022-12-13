@@ -17,7 +17,6 @@
         state.back_button = loadedMouse.back_button;
         state.led = loadedMouse.led;
 
-   
     }
 
     const state = reactive({

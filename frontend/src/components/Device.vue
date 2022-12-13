@@ -102,7 +102,7 @@
 .select-device-text {
   cursor: grab;
   top: 0;
-  height: 5em;
+  height: 3em;
   width: 25em;
   display: flex;
   font-size: 1.5em;
@@ -122,7 +122,7 @@
   box-shadow: 0 0 3px black;
   margin-top: 0px;
   width: 30em;
-  height: 5.5em;
+  height: 3.5em;
 }
 .line {
   border: 0;
