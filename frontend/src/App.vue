@@ -24,8 +24,8 @@
   <v-app color="#2E2252">
   <v-row fill-height>
     <transition name="fade" mode="out-in">
-        <!--<Device key="1" v-if="state.displaySelectDevices" @deviceSelected="deviceSelected"/>-->
-        <DeviceSettings  key="2" :checksum="state.selectedChecksum"/>
+        <Device key="1" v-if="state.displaySelectDevices" @deviceSelected="deviceSelected"/>
+        <DeviceSettings v-else  key="2" :checksum="state.selectedChecksum"/>
     </transition>
       
   </v-row>

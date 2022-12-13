@@ -17,6 +17,8 @@ export function LoadDevicesPolling():Promise<Error>;
 
 export function SelectDevice(arg1:string):Promise<Error>;
 
+export function SetLEDWrapper(arg1:string):Promise<void>;
+
 export function Shutdown(arg1:context.Context):Promise<void>;
 
 export function UpdateAvaliableDevices(arg1:Array<backend.DeviceInformationJson>):Promise<void>;

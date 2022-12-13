@@ -49,12 +49,14 @@
 
 
     onMounted(() => {
-        //SelectDevice(props.checksum);
+        SelectDevice(props.checksum);
+        /*
         state.mouse_loaded = true;
         state.dpi = 16000;
         state.back_button = "INTELLIMOUSE_PRO_BACK_BUTTON_SET_BACK_BUTTON";
         state.led = "#D40B58";
-        //runtime.EventsOn("mouseinformation", onMouseEvent);
+        */
+        runtime.EventsOn("mouseinformation", onMouseEvent);
     })
 </script>
 

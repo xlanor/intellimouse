@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { defineProps, reactive, watch, defineEmits } from 'vue';
-import { EventsEmit } from '../../wailsjs/runtime/runtime';
+import { SetLEDWrapper } from "../../wailsjs/go/backend/App"
 
     const props: any = defineProps({
         hashcolor: String,
@@ -23,7 +23,7 @@ import { EventsEmit } from '../../wailsjs/runtime/runtime';
 
     watch(()=> state.localhash, (newVal :string , oldVal :string) => {
         console.log(`Change to ${newVal} from ${oldVal}`)
-        // TODO: Save to mouse
+        SetLEDWrapper(newVal)
     })
 
     const onClose = () => {

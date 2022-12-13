@@ -122,12 +122,24 @@ func (a *App) LoadDevicesPolling() error {
 
 func (a *App) GetDeviceInformation() {
 	if a.Driver != nil {
-		fmt.Println("Here")
 		m := MouseInformationStruct{}
 		m.Init(a.Driver)
 		fmt.Printf("%v\n", m)
 		runtime.EventsEmit(a.ctx, "mouseinformation", m)
 	}else {
+		fmt.Println("Driver nil")
+	}
+}
+
+func (a *App) SetLEDWrapper(ledhex string) {
+	if a.Driver != nil {
+		err := a.Driver.SetLEDColor(ledhex)
+		if err != nil {
+			fmt.Println(err.Error())
+		}else {
+			fmt.Printf("Set hex to %s\n", ledhex)
+		}
+	} else {
 		fmt.Println("Driver nil")
 	}
 }
