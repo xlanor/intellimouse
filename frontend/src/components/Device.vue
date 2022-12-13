@@ -48,27 +48,25 @@
 </script>
 
 <template>
-  <div class="container-box">
-    <div>
-      <div class="title-text">
+  <v-row fill-height align="center" justify="center" >
+  <v-container>
+      <v-row align="center" justify="center" class="title-text"> 
         SELECT DEVICE
-      </div>
-      <div class="line"></div>
-      <div 
-        class="box1" 
+      </v-row>
+      <v-row class="line"/>
+      <v-row 
+        align="center" justify="center"
         v-for="(rates, index) in devices"
         :key="index + 'box'"
         @click="$emit('deviceSelected', rates.checksum)"
         v-if="state.validShowDevices"
       >
         <div class="select-device-text">
-          <!-- In case we want to support intellimouse in the future -->
-          {{ getDeviceName (rates.vendor_id, rates.product_id)}}
+        {{ getDeviceName (rates.vendor_id, rates.product_id)}}
         </div>
-      </div>
-    </div>
-    
-  </div>
+      </v-row>
+  </v-container>
+  </v-row>
 </template>
 
 <style>
@@ -84,9 +82,9 @@
   justify-content: center;
 }
 .box1{
-  margin-top: 10px;
+  margin-top: 10px !important;
   height: 5em;
-  width: 35em;
+  width: 30em;
   background-color: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(20px) saturate(160%) contrast(45%) brightness(140%);
   -webkit-backdrop-filter: blur(20px) saturate(160%) contrast(45%) brightness(140%);
@@ -104,13 +102,27 @@
 .select-device-text {
   cursor: grab;
   top: 0;
-  width: 100%;
-  height: 100%;
+  height: 5em;
+  width: 25em;
   display: flex;
   font-size: 1.5em;
+  margin-top: 10px !important;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(20px) saturate(160%) contrast(45%) brightness(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%) contrast(45%) brightness(140%);
+
+  transition: 0.5s;
+  border: 1px solid #b5b5b5;
+  border-radius: 10px;
   align-items: center; /** Y-axis align **/
   justify-content: center; /** X-axis align **/
   text-shadow: 2px 4px 4px rgba(18, 23, 31, 0.6);
+}
+.select-device-text:hover{
+  box-shadow: 0 0 3px black;
+  margin-top: 0px;
+  width: 30em;
+  height: 5.5em;
 }
 .line {
   border: 0;

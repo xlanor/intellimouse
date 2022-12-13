@@ -25,8 +25,8 @@
         dpi: 0,
         back_button: "",
         led: "",
-        show_information_page: false,
-        show_select_led: true,
+        show_information_page: true,
+        show_select_led: false,
         validShowDevices: computed(():any => {
             let rs: any = {  'width':'36px','min-height': '36px', 'border-style': 'solid' }
             if (state.led !== "") {
