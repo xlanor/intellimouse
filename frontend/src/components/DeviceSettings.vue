@@ -5,6 +5,7 @@
     import { back_button_map } from "../helpers/map_back_button"
     import { SelectDevice } from "../../wailsjs/go/backend/App"
     import SetLedColor from "./SetLedColor.vue"
+    import SetDpi from "./SetDpi.vue"
     import * as runtime from "../../wailsjs/runtime/runtime.js";
     const props: any = defineProps({
         checksum: String,
@@ -16,7 +17,6 @@
         state.dpi = loadedMouse.dpi;
         state.back_button = loadedMouse.back_button;
         state.led = loadedMouse.led;
-
     }
 
     const state = reactive({
@@ -26,6 +26,7 @@
         led: "",
         show_information_page: true,
         show_select_led: false,
+        show_select_dpi: false,
         validShowDevices: computed(():any => {
             let rs: any = {  'width':'36px','min-height': '36px', 'border-style': 'solid' }
             if (state.led !== "") {
@@ -38,6 +39,16 @@
     const toggle_show_select_led = () => {
         state.show_information_page = !state.show_information_page;
         state.show_select_led = !state.show_select_led;
+    }
+
+    const toggle_show_select_dpi = () => {
+        state.show_information_page = !state.show_information_page;
+        state.show_select_dpi = !state.show_select_dpi;
+    }
+
+    const updateDpi = (new_dpi: number) => {
+        state.dpi = new_dpi
+        toggle_show_select_dpi()
     }
 
     const updateLed = (new_led: string) => {
@@ -71,7 +82,9 @@
                     DPI:
                 </v-col>
                 <v-col align="left" cols="5">
-                    {{state.dpi}}
+                    <div class="select-box" @click="toggle_show_select_dpi">
+                        {{state.dpi}}
+                    </div>
                 </v-col>
             </v-row>
             <v-row
@@ -101,7 +114,10 @@
                 </v-col>
             </v-row>
         </v-col>
-        <v-col key="2" v-else="state.show_select_led" cols="5" class="device-select" > 
+        <v-col key="2" v-else-if="state.show_select_dpi" class="device-select">
+            <SetDpi :key="state.dpi" :dpi="state.dpi" @new_dpi="updateDpi"/>
+        </v-col>
+        <v-col key="3" v-else="state.show_select_led" cols="5" class="device-select" > 
             <SetLedColor :key="state.led" :hashcolor="state.led" @new_led="updateLed"/>
         </v-col>
     </transition>
@@ -129,6 +145,9 @@
   border: 1px solid #b5b5b5;
   border-radius: 10px;
     font-size: 1.5em; 
+}
+.select-box:hover{
+    cursor: grab;
 }
 .led-box:hover{
     cursor: grab;

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
     import { defineProps, reactive, watch, defineEmits } from 'vue';
+    import { SetDpiWrapper } from "../../wailsjs/go/backend/App"
 
     const props: any = defineProps({
         dpi: Number,
@@ -19,9 +20,13 @@
         // we get this emitted as a number but we need to make sure
         // its unsigned
         // pretty much we just clamp
-        
-        // TODO: Replace below with backend binding to wails
-        //SetLEDWrapper(newVal)
+        if (newVal < 200) {
+            newVal = 200
+        }
+        if (newVal > 16000){
+            newVal = 16000
+        }
+        SetDpiWrapper(newVal)
     })
 
     const onClose = () => {
@@ -31,7 +36,25 @@
 </script>
 
 <template>
-
+    <v-container>
+        <v-row class="flex-column" align="center" justify="center"> 
+            LED Color 
+            <v-btn @click="onClose">
+            </v-btn>
+        </v-row>
+        <v-row>
+         <div class="line"></div>
+        </v-row>
+        <v-row>
+            <v-slider
+                v-model="state.currentdpi"
+                :min="200"
+                :max="16000"
+                :step="100"
+                thumb-label
+            />
+        </v-row>
+    </v-container>
 </template>
 
 <style>

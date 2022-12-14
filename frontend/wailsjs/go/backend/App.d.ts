@@ -17,6 +17,8 @@ export function LoadDevicesPolling():Promise<Error>;
 
 export function SelectDevice(arg1:string):Promise<Error>;
 
+export function SetDpiWrapper(arg1:number):Promise<void>;
+
 export function SetLEDWrapper(arg1:string):Promise<void>;
 
 export function Shutdown(arg1:context.Context):Promise<void>;
