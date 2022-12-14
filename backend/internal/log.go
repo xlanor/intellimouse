@@ -23,6 +23,8 @@ func NewLogger() *logrus.Logger {
 			ForceColors:   true,
 			FullTimestamp: true,
 		})
+
+		logger.SetReportCaller(true)
 	})
 	return logger
 }

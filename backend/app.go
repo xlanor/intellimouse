@@ -38,9 +38,8 @@ func (a *App) DomReady(ctx context.Context) {
 }
 
 func (a *App) LoadDevices(ctx context.Context) {
-
 	devices := api.GetDeviceInfo(api.HidStruct{})
-	fmt.Println(len(devices))
+	a.Log.Info(fmt.Sprintf("%d devices loaded", len(devices)))
 }
 
 // beforeClose is called when the application is about to quit,

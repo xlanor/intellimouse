@@ -1,10 +1,11 @@
 package backend
 
 import (
-	"github.com/xlanor/intellimouse/api"
-	"github.com/dolmen-go/hid"
 	"fmt"
+	"github.com/dolmen-go/hid"
+	"github.com/xlanor/intellimouse/api"
 )
+
 // exposes information to vue
 
 type DeviceInformationJson struct {
@@ -20,29 +21,29 @@ type DeviceInformationJson struct {
 }
 
 type MouseInformationStruct struct {
-	Dpi uint16	`json:"dpi"`
+	Dpi               uint16 `json:"dpi"`
 	CurrentBackButton string `json:"back_button"`
-	LedColor string `json:"led"` 
+	LedColor          string `json:"led"`
 }
 
-func (m *MouseInformationStruct) Init(d *api.Driver){
+func (m *MouseInformationStruct) Init(d *api.Driver) {
 	if d != nil {
 		dpi, err := d.ReadDpi()
 		if err != nil {
 			fmt.Println(err.Error())
-		}else {
+		} else {
 			m.Dpi = dpi
 		}
 		back, err := d.GetCurrentBackButton()
 		if err != nil {
 			fmt.Println(err.Error())
-		}else {
+		} else {
 			m.CurrentBackButton = back
 		}
 		led, err := d.ReadLEDColor()
 		if err != nil {
 			fmt.Println(err.Error())
-		}else {
+		} else {
 			m.LedColor = led
 		}
 	}

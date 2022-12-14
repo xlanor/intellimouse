@@ -21,7 +21,6 @@ func inslice(n string, h []string) bool {
 	return false
 }
 
-
 func (d *DeviceInformationJson) ParseFromHidLib(di *hid.DeviceInfo) {
 	d.Path = di.Path
 	d.VendorID = di.VendorID
@@ -81,29 +80,26 @@ func (a *App) LoadAvaliableDevices() []DeviceInformationJson {
 }
 
 func (a *App) SelectDevice(checksum string) error {
-	fmt.Println("Checksum here")
-	fmt.Println(checksum)
+	a.Log.Info(fmt.Sprintf("Received checksum %s", checksum))
 	if deviceInfo, ok := a.AvaliableDevices[checksum]; ok {
 		if deviceInfo.DeviceInfo != nil {
-			fmt.Println("Opening driver")
+			a.Log.Info("Opening driver")
 			a.Driver = &api.Driver{}
 			a.Driver.Init(*deviceInfo.DeviceInfo)
 			err := a.Driver.Open()
 			if err != nil {
 				return err
 			} else {
-				fmt.Println(`Driver opened`)
+				a.Log.Info("Driver successfully opened")
 				a.GetDeviceInformation()
 			}
 		} else {
-			fmt.Println("Device Info has no avaliable device")
-			fmt.Printf("%v\n", deviceInfo)
+			a.Log.Error("Device Information has no avaliable devices")
 			return errors.New("Unable to Open device")
 		}
 
 	} else {
-		fmt.Println("Device Array has no avaliable device")
-		fmt.Printf("%v\n", a.AvaliableDevices)
+		a.Log.Error("Device array does not have any avaliable devices")
 		return errors.New("Unable to find device")
 	}
 	return nil
@@ -124,10 +120,10 @@ func (a *App) GetDeviceInformation() {
 	if a.Driver != nil {
 		m := MouseInformationStruct{}
 		m.Init(a.Driver)
-		fmt.Printf("%v\n", m)
+		a.Log.Info("Emitting mouse information to frontend")
 		runtime.EventsEmit(a.ctx, "mouseinformation", m)
-	}else {
-		fmt.Println("Driver nil")
+	} else {
+		a.Log.Error("Context Driver is not set")
 	}
 }
 
@@ -135,11 +131,11 @@ func (a *App) SetLEDWrapper(ledhex string) {
 	if a.Driver != nil {
 		err := a.Driver.SetLEDColor(ledhex)
 		if err != nil {
-			fmt.Println(err.Error())
-		}else {
-			fmt.Printf("Set hex to %s\n", ledhex)
+			a.Log.Error(fmt.Sprintf("Error when setting LED: %s", err.Error()))
+		} else {
+			a.Log.Info(fmt.Sprintf("LED changed to %s\n", ledhex))
 		}
 	} else {
-		fmt.Println("Driver nil")
+		a.Log.Error("Context Driver is not set")
 	}
 }
