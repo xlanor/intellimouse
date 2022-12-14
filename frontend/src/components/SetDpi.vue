@@ -38,7 +38,7 @@
 <template>
     <v-container>
         <v-row class="flex-column" align="center" justify="center"> 
-            LED Color 
+            DPI: {{state.currentdpi}}
             <v-btn @click="onClose">
             </v-btn>
         </v-row>

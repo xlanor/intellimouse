@@ -120,6 +120,8 @@ func (a *App) GetDeviceInformation() {
 	if a.Driver != nil {
 		m := MouseInformationStruct{}
 		m.Init(a.Driver)
+		a.Log.Info(fmt.Sprintf("DPI: %d", m.Dpi))
+		a.Log.Info(fmt.Sprintf("LED: %s", m.LedColor))
 		a.Log.Info("Emitting mouse information to frontend")
 		runtime.EventsEmit(a.ctx, "mouseinformation", m)
 	} else {
@@ -134,6 +136,20 @@ func (a *App) SetLEDWrapper(ledhex string) {
 			a.Log.Error(fmt.Sprintf("Error when setting LED: %s", err.Error()))
 		} else {
 			a.Log.Info(fmt.Sprintf("LED changed to %s\n", ledhex))
+		}
+	} else {
+		a.Log.Error("Context Driver is not set")
+	}
+}
+
+func (a *App) SetDpiWrapper(dpi int) {
+	dpi16 := uint16(dpi)
+	if a.Driver != nil {
+		err := a.Driver.SetDpi(dpi16)
+		if err != nil {
+			a.Log.Error(fmt.Sprintf("Error when setting DPI: %s", err.Error()))
+		} else {
+			a.Log.Info(fmt.Sprintf("DPI changed to %d", dpi16))
 		}
 	} else {
 		a.Log.Error("Context Driver is not set")
