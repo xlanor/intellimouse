@@ -312,9 +312,7 @@ func (di *Driver) SetBackButton(button int, button_mapping string) error {
 		button_header = INTELLIMOUSE_PRO_BACK_BUTTON
 	} else if button == MIDDLE_BUTTON {
 		button_header = INTELLIMOUSE_PRO_MIDDLE_BUTTON
-
 	} else if button == FORWARD_BUTTON {
-
 		button_header = INTELLIMOUSE_PRO_BACK_BUTTON
 	} else {
 		return errors.New("Button does not exist")

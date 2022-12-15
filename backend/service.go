@@ -155,3 +155,24 @@ func (a *App) SetDpiWrapper(dpi int) {
 		a.Log.Error("Context Driver is not set")
 	}
 }
+
+func (a *App) SetButtonWrapper(button_type string, new_value string) {
+	if a.Driver != nil {
+		if button_type == "back" {
+			err := a.Driver.SetBackButton(api.BACK_BUTTON, new_value)
+			if err != nil {
+				a.Log.Error(err.Error())
+			}else {
+				a.Log(fmt.Sprintf("Button set to %s", new_value))
+			}
+		}else if button_type == "front" {
+
+		} else if button_type == "middle"{ 
+
+		} else {
+			a.Log.Error(fmt.Sprintf("Unknown button type: Received %s", button_type))
+		}
+	} else {
+		a.Log.Error("Context driver is not set")
+	}
+}
