@@ -33,7 +33,7 @@
 
 <style>
 @import url('https://fonts.googleapis.com/css?family=Raleway');
-
+@import url(@mdi/font/css/materialdesignicons.css);
 
 
 #app {

@@ -36,7 +36,7 @@
 
   const getDeviceName = (vendor_id: number, product_id: number):string => {
     if (vendor_id === 1118 && product_id === 2090) {
-      return "Microsoft Intellimouse Explorer Pro (2018)"
+      return "Microsoft Intellimouse Explorer Pro (2019)"
     }
     return "unknown"
   }

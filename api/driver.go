@@ -145,7 +145,7 @@ func (di *Driver) SetDpi(dpi uint16) error {
 	if err != nil {
 		return err
 	}
-	time.Sleep(MOUSE_SLEEP_DRIVER_MILLISECONDS * time.Millisecond)
+	//time.Sleep(MOUSE_SLEEP_DRIVER_MILLISECONDS * time.Millisecond)
 	return nil
 }
 
@@ -244,7 +244,7 @@ func (di *Driver) SetLEDColor(colorHex string) error {
 	if err != nil {
 		return err
 	}
-	time.Sleep(MOUSE_SLEEP_DRIVER_MILLISECONDS * time.Millisecond)
+	//time.Sleep(MOUSE_SLEEP_DRIVER_MILLISECONDS * time.Millisecond)
 	return nil
 }
 
@@ -255,7 +255,7 @@ func (di *Driver) GetCurrentBackButton() (string, error) {
 	}
 
 	get_back_button_arr := di.mouse.GetBackButtonPayload()
-	get_back_button_full, err := di.mouse.TriggerReadRequestPayload(INTELLIMOUSE_PRO_BACK_BUTTON_READ, get_back_button_arr)
+	get_back_button_full, err := di.mouse.TriggerReadRequestPayload(INTELLIMOUSE_PRO_BUTTON_READ, get_back_button_arr)
 
 	if err != nil {
 		return "", err
@@ -293,16 +293,16 @@ func (di *Driver) GetCurrentBackButton() (string, error) {
 
 // Set back button takes a string representation and performs a lookup to map it to the hexadecimal payload
 // An error is returned if it is unable to find the details.
-func (di *Driver) SetBackButton(back_button_mapping string) error {
+func (di *Driver) SetBackButton(button_mapping string) error {
 	if di.mouse == nil || di.device == nil {
 		return errors.New("Mouse Object or Device not instantiated")
 	}
-	color_byte_arr, err := di.mouse.SetBackButtonPayload(back_button_mapping)
+	color_byte_arr, err := di.mouse.SetBackButtonPayload(button_mapping)
 	if err != nil {
 		return err
 	}
 
-	write_payload, err := di.mouse.TriggerWriteDataRequestPayload(INTELLIMOUSE_PRO_BACK_BUTTON_WRITE, color_byte_arr)
+	write_payload, err := di.mouse.TriggerWriteDataRequestPayload(INTELLIMOUSE_PRO_BUTTON_WRITE, color_byte_arr)
 
 	if err != nil {
 		return errors.New("Error when creating write report")
@@ -314,6 +314,6 @@ func (di *Driver) SetBackButton(back_button_mapping string) error {
 	if err != nil {
 		return err
 	}
-	time.Sleep(MOUSE_SLEEP_DRIVER_MILLISECONDS * time.Millisecond)
+	//time.Sleep(MOUSE_SLEEP_DRIVER_MILLISECONDS * time.Millisecond)
 	return nil
 }
