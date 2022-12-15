@@ -3,6 +3,7 @@
 
     import type { ButtonEvent } from "../models/mouse_event.models"
     import { button_map } from "../helpers/map_back_button"
+    import { SetButtonWrapper } from "../../wailsjs/go/backend/App"
 
     const props:any = defineProps({
         button_type: String,
@@ -16,8 +17,8 @@
         mouse_binding: props.mouse_binding,
     })
 
-    const updateMouseBinding = (newBinding: String) => {
-        console.log(newBinding)
+    const updateMouseBinding = () => {
+        SetButtonWrapper(state.button_type, state.mouse_binding)
     }
 
     const onClose = () => {

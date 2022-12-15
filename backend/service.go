@@ -163,7 +163,7 @@ func (a *App) SetButtonWrapper(button_type string, new_value string) {
 			if err != nil {
 				a.Log.Error(err.Error())
 			}else {
-				a.Log(fmt.Sprintf("Button set to %s", new_value))
+				a.Log.Info(fmt.Sprintf("Button set to %s", new_value))
 			}
 		}else if button_type == "front" {
 

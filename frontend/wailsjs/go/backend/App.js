@@ -30,6 +30,10 @@ export function SelectDevice(arg1) {
   return window['go']['backend']['App']['SelectDevice'](arg1);
 }
 
+export function SetButtonWrapper(arg1, arg2) {
+  return window['go']['backend']['App']['SetButtonWrapper'](arg1, arg2);
+}
+
 export function SetDpiWrapper(arg1) {
   return window['go']['backend']['App']['SetDpiWrapper'](arg1);
 }
