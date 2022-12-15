@@ -6,6 +6,12 @@ const (
 	MOUSE_SLEEP_DRIVER_MILLISECONDS = 1000
 )
 
+const (
+	BACK_BUTTON int = iota
+	MIDDLE_BUTTON
+	FORWARD_BUTTON
+)
+
 // intellimouse pro generic things
 const (
 	// uint16

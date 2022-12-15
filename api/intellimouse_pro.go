@@ -124,32 +124,16 @@ func (imp *IntelliMousePro) SetColorHexPayload(colorHexCode string) ([]byte, err
 }
 
 // Constructs a payload to send to the mouse to find out what the current back button is
-func (imp *IntelliMousePro) GetBackButtonPayload() []byte {
-	return []byte{INTELLIMOUSE_PRO_BACK_BUTTON}
+func (imp *IntelliMousePro) GetButtonPayload(button_header uint8) []byte {
+	return []byte{button_header}
 }
 
 // Accepts a button map string (since we expose this in the UI) and checks against our constant map.
-func (imp *IntelliMousePro) SetBackButtonPayload(buttonMap string) ([]byte, error) {
+func (imp *IntelliMousePro) SetButtonPayload(button_header uint8, buttonMap string) ([]byte, error) {
 	ret := make([]byte, 4)
 	if val, ok := ButtonMapping[buttonMap]; ok {
 		binary.BigEndian.PutUint32(ret, val)
-		return append([]byte{INTELLIMOUSE_PRO_BACK_BUTTON}, ret...), nil
-	} else {
-		return []byte{}, errors.New("Cannot find a valid button mapping")
-	}
-}
-
-// Constructs a payload to send to the mouse to find out what the current middle button is
-func (imp *IntelliMousePro) GetMiddleButtonPayload() []byte {
-	return []byte{INTELLIMOUSE_PRO_MIDDLE_BUTTON}
-}
-
-// Accepts a button map string (since we expose this in the UI) and checks against our constant map.
-func (imp *IntelliMousePro) SetMiddleButtonPayload(buttonMap string) ([]byte, error) {
-	ret := make([]byte, 4)
-	if val, ok := ButtonMapping[buttonMap]; ok {
-		binary.BigEndian.PutUint32(ret, val)
-		return append([]byte{INTELLIMOUSE_PRO_MIDDLE_BUTTON}, ret...), nil
+		return append([]byte{button_header}, ret...), nil
 	} else {
 		return []byte{}, errors.New("Cannot find a valid button mapping")
 	}

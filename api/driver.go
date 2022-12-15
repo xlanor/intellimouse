@@ -249,13 +249,26 @@ func (di *Driver) SetLEDColor(colorHex string) error {
 }
 
 // Gets the current status of the BackButton on the mouse.
-func (di *Driver) GetCurrentBackButton() (string, error) {
+func (di *Driver) GetButtonPayload(button int) (string, error) {
+	var button_header uint8
+	if button == BACK_BUTTON {
+		button_header = INTELLIMOUSE_PRO_BACK_BUTTON
+	} else if button == MIDDLE_BUTTON {
+		button_header = INTELLIMOUSE_PRO_MIDDLE_BUTTON
+
+	} else if button == FORWARD_BUTTON {
+
+		button_header = INTELLIMOUSE_PRO_BACK_BUTTON
+	} else {
+		return "", errors.New("Button does not exist")
+	}
+
 	if di.mouse == nil || di.device == nil {
 		return "", errors.New("Mouse Object or Device not instantiated")
 	}
 
-	get_back_button_arr := di.mouse.GetBackButtonPayload()
-	get_back_button_full, err := di.mouse.TriggerReadRequestPayload(INTELLIMOUSE_PRO_BUTTON_READ, get_back_button_arr)
+	get_button_arr := di.mouse.GetButtonPayload(button_header)
+	get_back_button_full, err := di.mouse.TriggerReadRequestPayload(INTELLIMOUSE_PRO_BUTTON_READ, get_button_arr)
 
 	if err != nil {
 		return "", err
@@ -293,16 +306,30 @@ func (di *Driver) GetCurrentBackButton() (string, error) {
 
 // Set back button takes a string representation and performs a lookup to map it to the hexadecimal payload
 // An error is returned if it is unable to find the details.
-func (di *Driver) SetBackButton(button_mapping string) error {
+func (di *Driver) SetBackButton(button int, button_mapping string) error {
+	var button_header uint8
+	if button == BACK_BUTTON {
+		button_header = INTELLIMOUSE_PRO_BACK_BUTTON
+	} else if button == MIDDLE_BUTTON {
+		button_header = INTELLIMOUSE_PRO_MIDDLE_BUTTON
+
+	} else if button == FORWARD_BUTTON {
+
+		button_header = INTELLIMOUSE_PRO_BACK_BUTTON
+	} else {
+		return errors.New("Button does not exist")
+	}
+
+
 	if di.mouse == nil || di.device == nil {
 		return errors.New("Mouse Object or Device not instantiated")
 	}
-	color_byte_arr, err := di.mouse.SetBackButtonPayload(button_mapping)
+	set_button_payload, err := di.mouse.SetButtonPayload(button_header, button_mapping)
 	if err != nil {
 		return err
 	}
 
-	write_payload, err := di.mouse.TriggerWriteDataRequestPayload(INTELLIMOUSE_PRO_BUTTON_WRITE, color_byte_arr)
+	write_payload, err := di.mouse.TriggerWriteDataRequestPayload(INTELLIMOUSE_PRO_BUTTON_WRITE, set_button_payload)
 
 	if err != nil {
 		return errors.New("Error when creating write report")

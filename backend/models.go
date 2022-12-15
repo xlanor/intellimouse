@@ -34,7 +34,7 @@ func (m *MouseInformationStruct) Init(d *api.Driver) {
 		} else {
 			m.Dpi = dpi
 		}
-		back, err := d.GetCurrentBackButton()
+		back, err := d.GetButtonPayload(api.BACK_BUTTON)
 		if err != nil {
 			fmt.Println(err.Error())
 		} else {
