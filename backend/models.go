@@ -23,6 +23,8 @@ type DeviceInformationJson struct {
 type MouseInformationStruct struct {
 	Dpi               uint16 `json:"dpi"`
 	CurrentBackButton string `json:"back_button"`
+	CurrentFrontButton string `json:"front_button"`
+	CurrentMiddleButton string `json:"middle_button"`
 	LedColor          string `json:"led"`
 }
 
@@ -39,6 +41,12 @@ func (m *MouseInformationStruct) Init(d *api.Driver) {
 			fmt.Println(err.Error())
 		} else {
 			m.CurrentBackButton = back
+		}
+		middle, err := d.GetButtonPayload(api.MIDDLE_BUTTON)
+		if err != nil {
+			fmt.Println(err.Error())
+		} else {
+			m.CurrentMiddleButton = middle
 		}
 		led, err := d.ReadLEDColor()
 		if err != nil {

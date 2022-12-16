@@ -18,6 +18,7 @@
         state.mouse_loaded = true;
         state.dpi = loadedMouse.dpi;
         state.back_button = loadedMouse.back_button;
+        state.middle_button = loadedMouse.middle_button;
         state.led = loadedMouse.led;
     }
 
@@ -163,6 +164,19 @@
                 no-gutters
             >
                 <v-col cols="7" align="right" class="column-pad-right">
+                    Front Button:
+                </v-col>
+                <v-col align="left" cols="5">
+                    <div class="select-box" @click="toggle_show_middle_button">
+                    {{button_map.get(state.middle_button)}}
+                    </div>
+                </v-col>
+            </v-row>
+            <v-row
+                align="start"
+                no-gutters
+            >
+                <v-col cols="7" align="right" class="column-pad-right">
                     Back Button:
                 </v-col>
                 <v-col align="left" cols="5">
@@ -194,7 +208,7 @@
             <SetLedColor :key="state.led" :hashcolor="state.led" @new_led="updateLed"/>
         </v-col>
         <v-col key="4" v-else="state.showButtonPage" cols="5" class="device-select">
-            <SetMouseButton :key="state.showButtonKey" :button_type="state.showButtonKey" @new_binding="showButtonBinding"/>
+            <SetMouseButton :key="state.showButtonKey" :mouse_binding="state.showButtonValue" :button_type="state.showButtonKey" @new_binding="showButtonBinding"/>
         </v-col>
     </transition>
     </v-row>

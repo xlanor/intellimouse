@@ -318,6 +318,8 @@ func (di *Driver) SetBackButton(button int, button_mapping string) error {
 		return errors.New("Button does not exist")
 	}
 
+	fmt.Println(fmt.Sprintf("Using %d", button_header))
+
 
 	if di.mouse == nil || di.device == nil {
 		return errors.New("Mouse Object or Device not instantiated")
