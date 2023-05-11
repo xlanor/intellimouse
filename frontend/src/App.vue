@@ -21,7 +21,7 @@
 </script>
 
 <template>
-  <v-app color="#2E2252">
+  <v-app class="overflow-hidden">
     <v-row fill-height>
       <transition name="fade" mode="out-in">
           <Device key="1" v-if="state.displaySelectDevices" @deviceSelected="deviceSelected"/>

@@ -36,14 +36,11 @@
 </script>
 
 <template>
-    <v-container>
-        <v-row class="flex-column" align="center" justify="center"> 
+    <v-container >
+        <v-row overflow-hidden class="flex-column" align="center" justify="center"> 
             DPI: {{state.currentdpi}}
-            <v-btn @click="onClose">
+            <v-btn icon="mdi-vuetify" @click="onClose">
             </v-btn>
-        </v-row>
-        <v-row>
-         <div class="line"></div>
         </v-row>
         <v-row>
             <v-slider

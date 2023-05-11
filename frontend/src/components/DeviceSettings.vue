@@ -164,7 +164,7 @@
                 no-gutters
             >
                 <v-col cols="7" align="right" class="column-pad-right">
-                    Front Button:
+                    Middle Button:
                 </v-col>
                 <v-col align="left" cols="5">
                     <div class="select-box" @click="toggle_show_middle_button">

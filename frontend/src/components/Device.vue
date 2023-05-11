@@ -49,11 +49,12 @@
 
 <template>
   <v-row fill-height align="center" justify="center" >
-  <v-container>
+  <v-container class="container-box">
+    <v-col>
+
       <v-row align="center" justify="center" class="title-text"> 
         SELECT DEVICE
       </v-row>
-      <v-row class="line"/>
       <v-row 
         align="center" justify="center"
         v-for="(rates, index) in devices"
@@ -65,6 +66,8 @@
         {{ getDeviceName (rates.vendor_id, rates.product_id)}}
         </div>
       </v-row>
+
+    </v-col>
   </v-container>
   </v-row>
 </template>
@@ -76,10 +79,7 @@
 }
 .container-box {
   height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 50%;
 }
 .box1{
   margin-top: 10px !important;
@@ -128,6 +128,7 @@
   border: 0;
   background-color: rgba(255, 255, 255, 0.2);
   height: 2px;
+  width: 50%;
   margin-bottom: 10px;
 }
 </style>
